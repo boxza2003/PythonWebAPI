@@ -1,11 +1,30 @@
 from typing import Union
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware # CORS中介
 from pydantic import BaseModel
 from typing import List, Dict, Optional, Any
 
 app = FastAPI()
 #uvicorn main:app --reload 
 #--reload: 當程式碼改變時 server 會自動重啟，只會於開發時使用
+
+# CORS 設置
+origins = [
+    "http://localhost",  # 允許從本地訪問
+    "https://localhost",
+    "http://127.0.0.1:5501",
+    "https://127.0.0.1",
+    "https://codedashboard-73dfb.web.app",  # 您的前端域名
+    "https://codedashboard-73dfb.firebaseapp.com"
+]
+# 添加 CORS 中介軟體
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # 允許的來源
+    allow_credentials=True,
+    allow_methods=["*"],  # 允許所有 HTTP 方法（GET, POST, PUT, DELETE 等）
+    allow_headers=["*"],  # 允許所有的請求頭部
+)
 
 class Device(BaseModel):
     idno: str
